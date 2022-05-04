@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daniilvoronin <daniilvoronin@student.42    +#+  +:+       +#+        */
+/*   By: cprester <cprester@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 19:55:42 by cprester          #+#    #+#             */
-/*   Updated: 2022/05/03 18:39:15 by daniilvoron      ###   ########.fr       */
+/*   Updated: 2022/05/04 18:14:06 by cprester         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int		open_files(char *file, int flag)
+int	open_files(char *file, int flag)
 {
 	int	fd;
 	int	access_val;
@@ -29,7 +29,7 @@ int		open_files(char *file, int flag)
 		else
 			fd = open(file, O_RDONLY);
 	}
-	else if (flag == 1);
+	else if (flag == 1)
 		fd = open(file, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	return (fd);
 }
@@ -58,7 +58,7 @@ int	child_proc(int in, int *end, char **argv, char **envp)
 	return (EXIT_FAILURE);
 }
 
-int	parent_proc(int out, int *end, char **argv, char **envp)
+int	parents_proc(int out, int *end, char **argv, char **envp)
 {
 	char	*cmd_parent;
 	int		dup2_val;
@@ -82,7 +82,7 @@ int	parent_proc(int out, int *end, char **argv, char **envp)
 	return (EXIT_FAILURE);
 }
 
-void	pipex(t_pipex *pipex, char **argv, char **envp)
+void	pipex_f(t_pipex *pipex, char **argv, char **envp)
 {
 	int	pipe_nmb;
 
@@ -93,7 +93,7 @@ void	pipex(t_pipex *pipex, char **argv, char **envp)
 		exit(EXIT_FAILURE);
 	}
 	pipex->pid = fork();
-	if (pipex->pid = 0)
+	if (pipex->pid == 0)
 		child_proc(pipex->in, pipex->end, argv, envp);
 	else
 	{
@@ -102,7 +102,7 @@ void	pipex(t_pipex *pipex, char **argv, char **envp)
 	}
 }
 
-void	main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	pipex;
 
@@ -123,5 +123,6 @@ void	main(int argc, char **argv, char **envp)
 		perror("Open failes on output file");
 		exit(EXIT_FAILURE);
 	}
-
+	pipex_f(&pipex, argv, envp);
+	return (EXIT_FAILURE);
 }
