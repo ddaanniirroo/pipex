@@ -1,39 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   pipe_processing.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daniilvoronin <daniilvoronin@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/04 20:19:49 by daniilvoron       #+#    #+#             */
-/*   Updated: 2022/05/04 22:42:00 by daniilvoron      ###   ########.fr       */
+/*   Created: 2022/05/04 22:42:43 by daniilvoron       #+#    #+#             */
+/*   Updated: 2022/05/04 22:46:16 by daniilvoron      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	multypipe(t_pipex_arg info)
+int	pipex(t_pipex_arg info, int **fd, int *pid)
 {
-	int		**fd;
-	pid_t	*pid;
-	int		i;
+	int	i;
 
 	i = 0;
-	fd = make_fd(info);
-	pid = malloc(sizeof(pid_t *) * (info.ac - 3));
-	if (!pid)
-		exit(EXIT_FAILURE);
-	return (0);
-	pipex(info, fd, pid);
-}
-
-int	main(int argc, char **argv, char **envp)
-{
-	t_pipex_arg	info;
-
-	info.ac = argc;
-	info.av = argv;
-	info.envp = envp;
-	multypipe(info);
+	while (i < info.ac - 3)
+	{
+		pid[i] = fork();
+		if (pid[i] == 0)
+			child_process(info, i, fd);
+		else if (pid[i] < 0)
+			exit(EXIT_FAILURE);
+		i++;
+	}
 	return (0);
 }

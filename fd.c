@@ -1,39 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   fd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daniilvoronin <daniilvoronin@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/04 20:19:49 by daniilvoron       #+#    #+#             */
-/*   Updated: 2022/05/04 22:42:00 by daniilvoron      ###   ########.fr       */
+/*   Created: 2022/05/04 22:17:52 by daniilvoron       #+#    #+#             */
+/*   Updated: 2022/05/05 01:01:10 by daniilvoron      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	multypipe(t_pipex_arg info)
+int	**make_fd(t_pipex_arg info)
 {
-	int		**fd;
-	pid_t	*pid;
-	int		i;
+	int	**fd;
+	int	i;
 
 	i = 0;
-	fd = make_fd(info);
-	pid = malloc(sizeof(pid_t *) * (info.ac - 3));
-	if (!pid)
+	fd = malloc(sizeof(int *) * (info.ac - 4));
+	if (!fd)
 		exit(EXIT_FAILURE);
-	return (0);
-	pipex(info, fd, pid);
-}
-
-int	main(int argc, char **argv, char **envp)
-{
-	t_pipex_arg	info;
-
-	info.ac = argc;
-	info.av = argv;
-	info.envp = envp;
-	multypipe(info);
-	return (0);
+	while (i < info.ac - 4)
+	{
+		fd[i] = malloc(sizeof(int) * 2);
+		if (!fd[i])
+			exit(EXIT_FAILURE);
+		i++;
+	}
+	i = 0;
+	while (i < info.ac - 4)
+	{
+		if (pipe(fd[i]) == -1)
+			ft_putchar_fd("Pipe error.\n", 2),exit(EXIT_FAILURE);
+		i++;
+	}
+	return (fd);
 }
