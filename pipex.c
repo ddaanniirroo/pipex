@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprester <cprester@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daniilvoronin <daniilvoronin@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 19:55:42 by cprester          #+#    #+#             */
-/*   Updated: 2022/04/28 20:48:14 by cprester         ###   ########.fr       */
+/*   Updated: 2022/05/03 18:39:15 by daniilvoron      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,32 @@ int	child_proc(int in, int *end, char **argv, char **envp)
 	}
 	close(end[1]);
 	close(in);
-	
+	cmd_child = data_processing(argv, envp, 2);
+	return (EXIT_FAILURE);
+}
+
+int	parent_proc(int out, int *end, char **argv, char **envp)
+{
+	char	*cmd_parent;
+	int		dup2_val;
+
+	close(end[1]);
+	dup2_val = dup2(end[1], STDIN_FILENO);
+	if (dup2_val < 0)
+	{
+		perror("Dup2 failed");
+		exit(EXIT_FAILURE);
+	}
+	dup2_val = dup2(out, STDOUT_FILENO);
+	if (dup2_val < 0)
+	{
+		perror("Dup2 failed");
+		exit(EXIT_FAILURE);
+	}
+	close(end[0]);
+	close(out);
+	cmd_parent = data_processing(argv, envp, 3);
+	return (EXIT_FAILURE);
 }
 
 void	pipex(t_pipex *pipex, char **argv, char **envp)
