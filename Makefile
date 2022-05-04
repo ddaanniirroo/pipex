@@ -3,9 +3,6 @@ NAME = pipex
 HEADER =  pipex.h \
 
 SRCS =   pipex.c \
-   ft_split.c \
-   pipex_help.c \
-   utils.c \
 
 OBJS =   $(SRCS:.c=.o)
 DEPS = $(OBJS:.o=.d)
