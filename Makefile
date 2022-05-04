@@ -8,27 +8,25 @@ SRCS =   pipex.c \
    utils.c \
 
 OBJS =   $(SRCS:.c=.o)
+DEPS = $(OBJS:.o=.d)
 
-CC = cc
+CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -MMD #-Wall -Wextra -Werror
 
-RM = rm -f
-
-%.o:  %.c pipex.h
-   $(CC) $(CFLAGS) -c $< -o $@
-
-$(NAME): $(OBJS) $(HEADER)
-   $(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 all:  $(NAME)
 
 clean:
-   @$(RM) $(OBJS)
+	@$(RM) $(OBJS) $(DEPS)
 
 fclean: clean
-   @$(RM) $(NAME)
+	@$(RM) $(NAME)
 
 re:   fclean all
 
 .PHONY:  all clean fclean re
+
+include $(wildcard $(DEPS))
