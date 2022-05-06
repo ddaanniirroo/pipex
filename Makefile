@@ -3,13 +3,16 @@ NAME = pipex
 HEADER =  pipex.h \
 
 SRCS =   pipex.c \
+		ft_split.c \
+		libft_f.c \
+		path_cmd.c \
 
 OBJS =   $(SRCS:.c=.o)
 DEPS = $(OBJS:.o=.d)
 
 CC = gcc
 
-CFLAGS = -MMD #-Wall -Wextra -Werror
+CFLAGS = -MMD -Wall -Wextra -Werror
 
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
